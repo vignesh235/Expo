@@ -1,75 +1,76 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 
-class ScanQrPage extends StatefulWidget {
+class MyHomePage extends StatefulWidget {
+  MyHomePage({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
   @override
-  State<StatefulWidget> createState() => _ScanQrPageState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _ScanQrPageState extends State<ScanQrPage> {
-  Barcode? result;
-  QRViewController? controller;
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
+  TabController? _tabController;
 
-  void _onQRViewCreated(QRViewController controller) {
-    setState(() => this.controller = controller);
-    controller.scannedDataStream.listen((scanData) {
-      setState(() => result = scanData);
-    });
-  }
-
-  // In order to get hot reload to work we need to pause the camera if the platform
-  // is android, or resume the camera if the platform is iOS.
   @override
-  void reassemble() {
-    super.reassemble();
-    if (Platform.isAndroid) {
-      controller!.pauseCamera();
-    } else if (Platform.isIOS) {
-      controller!.resumeCamera();
-    }
-  }
-
-  void readQr() async {
-    if (result != null) {
-      controller!.pauseCamera();
-      print(result!.code);
-      controller!.dispose();
-    }
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
-    readQr();
     return Scaffold(
-      body: Column(
-        children: [
-          SizedBox(
-            width: 500,
-            height: 500,
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
-              overlay: QrScannerOverlayShape(
-                borderColor: Colors.orange,
-                borderRadius: 10,
-                borderLength: 30,
-                borderWidth: 10,
-                cutOutSize: 250,
-              ),
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: DefaultTabController(
+        length: 2,
+        initialIndex: 0,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              children: <Widget>[
+                TabBar(
+                  controller: _tabController,
+                  indicatorColor: Colors.green,
+                  tabs: [
+                    Tab(
+                      text: "Today",
+                    ),
+                    Tab(
+                      text: "Workddd",
+                    ),
+                  ],
+                  labelColor: Colors.white,
+                  unselectedLabelColor: Colors.black,
+                  indicator: RectangularIndicator(
+                    bottomLeftRadius: 100,
+                    bottomRightRadius: 100,
+                    topLeftRadius: 100,
+                    topRightRadius: 100,
+                  ),
+                ),
+                Container(
+                  width: 200,
+                  height: 200,
+                  child: TabBarView(controller: _tabController, children: [
+                    Container(
+                      width: 10,
+                      height: 10,
+                      child: Text("dddddgdggfgddddddddd"),
+                    ),
+                    Container(
+                        width: 10, height: 10, child: Text("dddddddddddddd")),
+                  ]),
+                )
+              ],
             ),
           ),
-          Text(qrKey.toString())
-        ],
+        ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
   }
 }
