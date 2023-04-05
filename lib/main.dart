@@ -1,7 +1,10 @@
 import 'package:expo/Screens/Homepage.dart';
-import 'package:expo/Screens/test.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:get/get.dart';
+
+import 'Screens/Homescreen.dart';
+import 'components/routes.dart';
 
 void main() async {
   runApp(MyApp());
@@ -10,14 +13,14 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       theme: ThemeData(
-        scaffoldBackgroundColor: const Color(0xFFffffff),
+        scaffoldBackgroundColor: const Color(0xFFEDEFFE),
         //google fonts lato theme...
         textTheme: GoogleFonts.poppinsTextTheme(
           Theme.of(context).textTheme,
         ),
-        primarySwatch: createMaterialColor(const Color(0xFF273b69)),
+        primarySwatch: createMaterialColor(const Color(0xFFA7D5E5)),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       // initialRoute: '/',
@@ -31,7 +34,9 @@ class MyApp extends StatelessWidget {
       },
       title: 'My App',
       debugShowCheckedModeBanner: false,
-      home: Homepage(),
+      initialRoute: '/home',
+      getPages: appRoutes(),
+      // home: const homescreen(),
     );
   }
 
