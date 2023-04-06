@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import '../Screens/Homepage.dart';
 import '../Screens/Homescreen.dart';
 
 appRoutes() => [
@@ -9,13 +10,13 @@ appRoutes() => [
         transition: Transition.leftToRightWithFade,
         transitionDuration: Duration(milliseconds: 500),
       ),
-      // GetPage(
-      //   name: '/second',
-      //   page: () => SecondPage(),
-      //   middlewares: [MyMiddelware()],
-      //   transition: Transition.leftToRightWithFade,
-      //   transitionDuration: Duration(milliseconds: 500),
-      // ),
+      GetPage(
+        name: '/second',
+        page: () => Homepage(),
+        middlewares: [MyMiddelware()],
+        transition: Transition.leftToRightWithFade,
+        transitionDuration: Duration(milliseconds: 500),
+      ),
       // GetPage(
       //   name: '/third',
       //   page: () => ThirdPage(),
