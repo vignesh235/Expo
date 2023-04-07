@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       },
       title: 'My App',
       debugShowCheckedModeBanner: false,
-      initialRoute: '/home',
+      initialRoute: '/login',
       getPages: appRoutes(),
       // home: const homescreen(),
     );

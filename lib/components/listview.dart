@@ -1,9 +1,9 @@
 import 'package:expo/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
-
+import 'package:get/get.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../Screens/Homepage.dart';
-import 'QR.dart';
 
 Widget myListView(int count) {
   return ListView.builder(
@@ -12,8 +12,7 @@ Widget myListView(int count) {
         return Card(
             child: GestureDetector(
                 onTap: () {
-             return Homepage;
-                
+                  Get.toNamed('/second');
                 },
                 child: ListTile(
                     leading: CircleAvatar(
@@ -34,4 +33,8 @@ Widget myListView(int count) {
                           color: Color(0XFF010418)),
                     ))));
       });
+
+
+
+      
 }
