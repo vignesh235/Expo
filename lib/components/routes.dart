@@ -2,8 +2,15 @@ import 'package:get/get.dart';
 
 import '../Screens/Homepage.dart';
 import '../Screens/Homescreen.dart';
+import '../Screens/loginpage.dart';
 
 appRoutes() => [
+      GetPage(
+        name: '/login',
+        page: () => Login(),
+        transition: Transition.leftToRightWithFade,
+        transitionDuration: Duration(milliseconds: 500),
+      ),
       GetPage(
         name: '/home',
         page: () => homescreen(),

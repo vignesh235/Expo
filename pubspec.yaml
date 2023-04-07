@@ -42,6 +42,15 @@ dependencies:
   get: ^4.6.5
   tab_indicator_styler: ^2.0.0
   flutter_phosphor_icons: ^0.0.1+6
+  flutter_dotenv: ^5.0.2
+  audioplayers: ^3.0.1
+  flutter_svg: ^2.0.4
+  shared_preferences: ^2.1.0
+  form_field_validator: ^1.1.0
+  fluttertoast: ^8.2.1
+  font_awesome_flutter: ^10.4.0
+  package_info_plus: ^3.0.3
+  connectivity: ^3.0.6
 
 dev_dependencies:
   flutter_test:
