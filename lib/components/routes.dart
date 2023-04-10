@@ -13,7 +13,7 @@ appRoutes() => [
       ),
       GetPage(
         name: '/home',
-        page: () => homescreen(),
+        page: () => const homescreen(),
         transition: Transition.leftToRightWithFade,
         transitionDuration: Duration(milliseconds: 500),
       ),
