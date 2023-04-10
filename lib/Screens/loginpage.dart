@@ -362,13 +362,7 @@ class _LoginState extends State<Login> {
         print(token.getString("full_name"));
         var user_email = token.getString("full_name");
 
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const homescreen(),
-          ),
-          (route) => false,
-        );
+        Get.toNamed('/home');
 
         Fluttertoast.showToast(
             msg: (json.decode(response.body)['message']),
