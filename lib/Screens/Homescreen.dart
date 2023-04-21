@@ -49,7 +49,7 @@ class _homescreenState extends State<homescreen> with TickerProviderStateMixin {
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
           title: Column(children: [
-            Text(
+            const Text(
               '  Hello there' " 👋🏼",
               style: TextStyle(
                   fontSize: 14,
@@ -198,18 +198,11 @@ class _homescreenState extends State<homescreen> with TickerProviderStateMixin {
     print('ddddddddddddddddddddddddddd');
     print('ddddddddddddddddddddddddddd');
 
-    // var user_name;
-    // SharedPreferences token = await SharedPreferences.getInstance();
-    // user_name = token.getString('full_name').toString();
-
-    // print(user_name);
     SharedPreferences token = await SharedPreferences.getInstance();
 
-    var response = await http.post(
-        Uri.parse(
-            "https://sstlive.thirvusoft.co.in/api/method/expo.expo.custom.api.event_list?user=${token.getString('full_name').toString()}"),
-        headers: {"Authorization": "token 1599e6dcec498c6:ae5a9f65dd361e8"});
-
+    var response = await http.post(Uri.parse(
+        "${dotenv.env['API_URL']}/api/method/thirvu_event.custom.py.api.event_list?user=${token.getString('full_name')}"));
+    print(response.body);
     print(response.body);
     if (response.statusCode == 200) {
       setState(() {

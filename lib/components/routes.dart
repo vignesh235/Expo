@@ -9,7 +9,7 @@ appRoutes() => [
         name: '/login',
         page: () => Login(),
         transition: Transition.leftToRightWithFade,
-        transitionDuration: Duration(milliseconds: 500),
+        transitionDuration: const Duration(milliseconds: 500),
       ),
       GetPage(
         name: '/home',

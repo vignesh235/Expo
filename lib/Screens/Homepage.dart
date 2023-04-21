@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -64,13 +65,14 @@ class _HomepageState extends State<Homepage> {
               child: (result != null)
                   ? Text(
                       'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
-                  : Text('Scan a code'),
+                  : const Text('Scan a code'),
             ),
           ),
           // ElevatedButton(
-          //   child: Text('Woolha.com'),
+          //   child: const Text('Woolha.com'),
           //   onPressed: () async {
-          //     await controller!.toggleFlash();
+          //     print(result!.code);
+          //     // await controller!.toggleFlash();
           //   },
           // ),
           // ElevatedButton(
@@ -95,7 +97,12 @@ class _HomepageState extends State<Homepage> {
     controller.scannedDataStream.listen((scanData) {
       setState(() {
         result = scanData;
-        pendinglist_();
+        print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+        print(result!.code);
+        if (result!.code!.isNotEmpty) {
+          Get.back();
+        }
+        // pendinglist_();
       });
     });
   }
