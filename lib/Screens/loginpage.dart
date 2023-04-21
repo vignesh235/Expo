@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,31 @@ var user_name;
 
 class _LoginState extends State<Login> {
   var login_loading = false;
+  var tokens;
+  late Timer timer;
+
   bool _isObscure = true;
+  void initState() {
+    super.initState();
+    time();
+  }
+
+  Future time() async {
+    SharedPreferences token = await SharedPreferences.getInstance();
+    print("cccccccccccccccccccccccccccccccccccccccccc");
+    print(token.getString("token"));
+    setState(() {
+      tokens = token.getString('token').toString();
+      print(tokens);
+    });
+
+    if (tokens == "null") {
+      Get.toNamed("/login");
+    } else if (tokens != null) {
+      timer =
+          Timer(const Duration(milliseconds: 12), () => Get.toNamed("/home"));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -359,6 +384,7 @@ class _LoginState extends State<Login> {
 
         token.setString(
             'full_name', json.decode(response.body)['full_name'] ?? "");
+        token.setString('token', json.decode(response.body)['token'] ?? "");
         print(token.getString("full_name"));
         var user_email = token.getString("full_name");
 

@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../constants.dart';
 import 'Homescreen.dart';
 
 class Homepage extends StatefulWidget {
@@ -97,10 +98,13 @@ class _HomepageState extends State<Homepage> {
     controller.scannedDataStream.listen((scanData) {
       setState(() {
         result = scanData;
-        print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         print(result!.code);
         if (result!.code!.isNotEmpty) {
-          Get.back();
+          setState(() {
+            eventcode = result!.code.toString();
+          });
+          controller!.pauseCamera();
+          Get.toNamed('/home');
         }
         // pendinglist_();
       });
@@ -111,43 +115,5 @@ class _HomepageState extends State<Homepage> {
   void dispose() {
     controller?.dispose();
     super.dispose();
-  }
-
-  Future pendinglist_() async {
-    var name_code = {result!.code}.toString();
-    String value = name_code.substring(2, name_code.length - 2);
-    print(value);
-    SharedPreferences token = await SharedPreferences.getInstance();
-    var name;
-    name = token.getString('full_name').toString();
-    print(name);
-    print(value);
-    print('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu');
-    var response = await http.post(
-        Uri.parse(
-            "https://sstlive.thirvusoft.co.in/api/method/expo.expo.custom.api.attendance?user=${name}&name=${value}"),
-        headers: {"Authorization": "token 1599e6dcec498c6:ae5a9f65dd361e8"});
-    print(response.body);
-    print(
-        "https://sstlive.thirvusoft.co.in/api/method/expo.expo.custom.api.attendance?user=${name}&name=${value}");
-    print(response.statusCode);
-    print('pppppppppppppppppppppppppppppppppppppppppppp');
-    if (response.statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(json.decode(response.body)['message']),
-        backgroundColor: Colors.green,
-      ));
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const homescreen()),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(json.decode(response.body)['message']),
-        backgroundColor: Colors.green,
-      ));
-      Navigator.pop(context);
-    }
-    ;
   }
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
+import 'package:get/get_connect/sockets/src/socket_notifier.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 
@@ -11,7 +12,9 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 
+import '../constants.dart';
 import 'Homepage.dart';
+import 'loginpage.dart';
 
 class homescreen extends StatefulWidget {
   const homescreen({super.key});
@@ -33,6 +36,9 @@ class _homescreenState extends State<homescreen> with TickerProviderStateMixin {
 
     pendinglist_();
     user();
+    if (eventcode != "") {
+      attdance(eventcode);
+    }
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
   }
@@ -60,12 +66,16 @@ class _homescreenState extends State<homescreen> with TickerProviderStateMixin {
               username,
             )
           ]),
-          actions: const [
+          actions: [
             Padding(
               padding: EdgeInsets.only(right: 10),
-              child: CircleAvatar(
-                backgroundImage: AssetImage('assets/profile.png'),
-              ),
+              child: GestureDetector(
+                  onTap: () {
+                    _delete(context);
+                  },
+                  child: CircleAvatar(
+                    backgroundImage: AssetImage('assets/profile.png'),
+                  )),
             ),
           ],
         ),
@@ -207,17 +217,95 @@ class _homescreenState extends State<homescreen> with TickerProviderStateMixin {
     if (response.statusCode == 200) {
       setState(() {
         for (var i = 0; i < json.decode(response.body)['today'].length; i++) {
-          event.add((json.decode(response.body)['today'][i]));
+          setState(() {
+            event.add((json.decode(response.body)['today'][i]));
+          });
         }
         for (var i = 0;
             i < json.decode(response.body)['upcoming'].length;
             i++) {
-          event_upcoming.add((json.decode(response.body)['upcoming'][i]));
+          setState(() {
+            event_upcoming.add((json.decode(response.body)['upcoming'][i]));
+          });
         }
         print(event);
         print(event_upcoming);
       });
     }
     ;
+  }
+
+  Future attdance(eventcode) async {
+    print("ooooooooooooooooooooooooooooooooooooo");
+    print(eventcode);
+
+    print(eventcode);
+    SharedPreferences token = await SharedPreferences.getInstance();
+    print(token.getString("token"));
+    var name;
+    eventcode = eventcode.replaceAll('"', '');
+
+    name = token.getString('full_name').toString();
+
+    var response = await http.post(
+        Uri.parse(
+            "${dotenv.env['API_URL']}/api/method/thirvu_event.custom.py.api.attendance?user=$name&name=$eventcode"),
+        headers: {"Authorization": token.getString('token') ?? ""});
+    print(response.body);
+    print(
+        "${dotenv.env['API_URL']}/api/method/thirvu_event.custom.py.api.attendance?user=${name}&name=${eventcode}");
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      pendinglist_();
+      setState(() {
+        eventcode = "";
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.green,
+      ));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(json.decode(response.body)['message']),
+        backgroundColor: Colors.green,
+      ));
+    }
+  }
+
+  void _delete(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: const Text("Please Confirm",
+                style: TextStyle(
+                    fontSize: 20, letterSpacing: .2, color: Color(0xFF2B3467))),
+            content: const Text("Are you sure to logout?",
+                style: TextStyle(
+                    fontSize: 15, letterSpacing: .2, color: Color(0xFF2B3467))),
+            actions: [
+              // The "Yes" button
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("No"),
+              ),
+              TextButton(
+                onPressed: () async {
+                  final token = await SharedPreferences.getInstance();
+                  print(token.getString("token"));
+                  await token.clear();
+                  // await token.remove('token');
+                  print(token.getString("token"));
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => Login()));
+                },
+                child: const Text("Yes"),
+              ),
+            ],
+          );
+        });
   }
 }
