@@ -2,12 +2,13 @@ import 'package:expo/Screens/Homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'Screens/Homescreen.dart';
 import 'components/routes.dart';
 
 void main() async {
   runApp(MyApp());
+  await dotenv.load(fileName: ".env");
 }
 
 class MyApp extends StatelessWidget {
@@ -24,14 +25,14 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       // initialRoute: '/',
-      routes: {
-        // // '/': (context) => HomePage(),
+      // routes: {
+      //   // // '/': (context) => HomePage(),
 
-        // '/homescreen': (context) => const HomePage(),
-        // '/detail': (context) => test(),
-        // // '/itemlist': (context) => test(),
-        // '/bottomsheeet': (context) => bottomnavigation(),
-      },
+      //   // '/homescreen': (context) => const HomePage(),
+      //   // '/detail': (context) => test(),
+      //   // // '/itemlist': (context) => test(),
+      //   // '/bottomsheeet': (context) => bottomnavigation(),
+      // },
       title: 'My App',
       debugShowCheckedModeBanner: false,
       initialRoute: '/login',
